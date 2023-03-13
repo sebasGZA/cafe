@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "node --watch index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "sebasGZA",
@@ -12,6 +13,16 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
-  }
+    "express": "^4.18.2",
+    "mongoose": "^7.0.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebasGZA/cafe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sebasGZA/cafe/issues"
+  },
+  "homepage": "https://github.com/sebasGZA/cafe#readme"
 }
