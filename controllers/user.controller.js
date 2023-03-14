@@ -17,7 +17,6 @@ const getUsers = (req = request, res = response) => {
 const postUser = async (req = request, res = response) => {
   try {
     const { name, email, password, role } = req.body;
-
     const user = new User({
       name,
       email,
@@ -31,13 +30,14 @@ const postUser = async (req = request, res = response) => {
         msg: "Email already exists",
       });
     }
+
     //Hash password
     const salt = bcryptjs.genSaltSync();
     user.password = bcryptjs.hashSync(password, salt);
 
     await user.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       msg: "post API - postUser",
       user,
     });

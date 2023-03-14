@@ -8,7 +8,8 @@ const {
   deleteUser,
 } = require("../controllers/user.controller");
 const { fieldsValidator } = require("../middlewares/fieldsValidator");
-const Role = require("../models/role.model");
+const { roleValidator } = require("../helpers/dbValidators");
+
 const router = Router();
 
 router.get("/", getUsers);
@@ -20,12 +21,7 @@ router.post(
     check("email", "Email is not valid").isEmail(),
     check("password", "Password must have 6 letters").not().isEmpty(),
     // check("role", "Role is required").isIn(["ADMIN_ROLE", "USER_ROLE"]),
-    check("role", "Role is required").custom(async (role = "") => {
-      const roleDb = await Role.findOne({ role });
-      if (!roleDb) {
-        throw new Error("Role is not valid");
-      }
-    }),
+    check("role", "Role is required").custom(roleValidator),
 
     fieldsValidator,
   ],
