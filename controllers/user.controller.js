@@ -1,6 +1,6 @@
 const { response, request } = require("express");
-const bcryptjs = require("bcryptjs");
 const User = require("../models/user.model");
+const { hashPassword } = require("../helpers/passwordGenerator");
 
 const getUsers = (req = request, res = response) => {
   const { q, api_key = "no api_key", page = 1, limit = 10 } = req.query;
@@ -25,8 +25,7 @@ const postUser = async (req = request, res = response) => {
     });
 
     //Hash password
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
+    user.password = hashPassword(password);
 
     await user.save();
 
@@ -40,13 +39,25 @@ const postUser = async (req = request, res = response) => {
   }
 };
 
-const putUser = (req = request, res = response) => {
-  const { id } = req.params;
+const putUser = async (req = request, res = response) => {
+  try {
+    const { id } = req.params;
+    const { password, google, email, ...user } = req.body;
 
-  res.status(500).json({
-    msg: "put API - putUser",
-    data: id,
-  });
+    if (password) {
+      user.password = hashPassword(password);
+    }
+
+    const userDb = await User.findOneAndUpdate(id, user);
+
+    res.status(200).json({
+      msg: "put API - putUser",
+      userDb,
+    });
+  } catch (e) {
+    console.log(e);
+    throw new Error("Error in putUser from user.controller");
+  }
 };
 
 const patchUser = (req, res = response) => {
