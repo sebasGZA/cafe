@@ -42,7 +42,7 @@ const postUser = async (req = request, res = response) => {
 const putUser = async (req = request, res = response) => {
   try {
     const { id } = req.params;
-    const { password, google, email, ...user } = req.body;
+    const { _id, password, google, email, ...user } = req.body;
 
     if (password) {
       user.password = hashPassword(password);

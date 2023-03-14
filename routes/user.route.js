@@ -8,7 +8,11 @@ const {
   deleteUser,
 } = require("../controllers/user.controller");
 const { fieldsValidator } = require("../middlewares/fieldsValidator");
-const { roleValidator, emailValidator } = require("../helpers/dbValidators");
+const {
+  roleValidator,
+  emailValidator,
+  userValidatorById,
+} = require("../helpers/dbValidators");
 
 const router = Router();
 
@@ -29,7 +33,17 @@ router.post(
   postUser
 );
 
-router.put("/:id", putUser);
+router.put(
+  "/:id",
+  [
+    check("id", "id is not valid").isMongoId(),
+    check("id").custom(userValidatorById),
+    check("password", "Password must have 6 letters").not().isEmpty(),
+    check("role").custom(roleValidator),
+    fieldsValidator,
+  ],
+  putUser
+);
 
 router.patch("/:id", patchUser);
 
