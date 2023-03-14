@@ -1,4 +1,5 @@
 const { response, request } = require("express");
+const User = require("../models/user.model");
 
 const getUsers = (req = request, res = response) => {
   const { q, api_key = "no api_key", page = 1, limit = 10 } = req.query;
@@ -12,13 +13,22 @@ const getUsers = (req = request, res = response) => {
   });
 };
 
-const postUser = (req, res = response) => {
-  const body = req.body;
+const postUser = async (req, res = response) => {
+  try {
+    const body = req.body;
 
-  res.status(201).json({
-    msg: "post API - postUser",
-    data: body,
-  });
+    const user = new User(body);
+
+    await user.save();
+
+    res.status(201).json({
+      msg: "post API - postUser",
+      user,
+    });
+  } catch (e) {
+    console.log(e);
+    throw Error("Error in postUser from user.controller");
+  }
 };
 
 const putUser = (req = request, res = response) => {
