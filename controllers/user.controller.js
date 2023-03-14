@@ -24,13 +24,6 @@ const postUser = async (req = request, res = response) => {
       role,
     });
 
-    const existEmail = await User.findOne({ email });
-    if (existEmail) {
-      return res.status(400).json({
-        msg: "Email already exists",
-      });
-    }
-
     //Hash password
     const salt = bcryptjs.genSaltSync();
     user.password = bcryptjs.hashSync(password, salt);

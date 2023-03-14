@@ -8,7 +8,7 @@ const {
   deleteUser,
 } = require("../controllers/user.controller");
 const { fieldsValidator } = require("../middlewares/fieldsValidator");
-const { roleValidator } = require("../helpers/dbValidators");
+const { roleValidator, emailValidator } = require("../helpers/dbValidators");
 
 const router = Router();
 
@@ -19,9 +19,10 @@ router.post(
   [
     check("name", "Name is required").not().isEmpty(),
     check("email", "Email is not valid").isEmail(),
+    check("email").custom(emailValidator),
     check("password", "Password must have 6 letters").not().isEmpty(),
     // check("role", "Role is required").isIn(["ADMIN_ROLE", "USER_ROLE"]),
-    check("role", "Role is required").custom(roleValidator),
+    check("role").custom(roleValidator),
 
     fieldsValidator,
   ],
