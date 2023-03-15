@@ -4,12 +4,17 @@ const { hashPassword } = require("../helpers/passwordGenerator");
 
 const getUsers = async (req = request, res = response) => {
   const { skip = 0, limit = 5 } = req.query;
+  const query = { state: true };
 
-  const users = await User.find().limit(limit).skip(skip);
+  const [users, total] = await Promise.all([
+    User.find(query).limit(limit).skip(skip),
+    User.countDocuments(query),
+  ]);
 
-  res.json({
+  return res.status(200).json({
     msg: "get API - getUsers",
     users,
+    total,
   });
 };
 
