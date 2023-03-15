@@ -72,13 +72,14 @@ const patchUser = (req, res = response) => {
 
 const deleteUser = async (req = request, res = response) => {
   const { id } = req.params;
-
-  // const user = await User.findByIdAndDelete(id);
-  const user = await User.findByIdAndUpdate(id, { state: false });
+  
+  const userDeleted = await User.findByIdAndUpdate(id, { state: false });
+  const userAuth = req.user;
 
   res.json({
     msg: "delete API - deleteUser",
-    user,
+    userDeleted,
+    userAuth,
   });
 };
 
