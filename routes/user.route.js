@@ -1,6 +1,10 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
+
+//Middelwares
 const { fieldsValidator } = require("../middlewares/fieldsValidator");
+const { JWTValidator } = require("../middlewares/JWTValidator");
+
 const {
   getUsers,
   postUser,
@@ -50,6 +54,7 @@ router.patch("/:id", patchUser);
 router.delete(
   "/:id",
   [
+    JWTValidator,
     check("id", "id is not valid").isMongoId(),
     check("id").custom(userValidatorById),
     fieldsValidator,
