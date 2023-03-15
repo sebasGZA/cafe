@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
+const { fieldsValidator } = require("../middlewares/fieldsValidator");
 const {
   getUsers,
   postUser,
@@ -7,7 +8,6 @@ const {
   patchUser,
   deleteUser,
 } = require("../controllers/user.controller");
-const { fieldsValidator } = require("../middlewares/fieldsValidator");
 const {
   roleValidator,
   emailValidator,

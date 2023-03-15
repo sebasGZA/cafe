@@ -2,15 +2,14 @@ const { response, request } = require("express");
 const User = require("../models/user.model");
 const { hashPassword } = require("../helpers/passwordGenerator");
 
-const getUsers = (req = request, res = response) => {
-  const { q, api_key = "no api_key", page = 1, limit = 10 } = req.query;
+const getUsers = async (req = request, res = response) => {
+  const { skip = 0, limit = 5 } = req.query;
+
+  const users = await User.find().limit(limit).skip(skip);
 
   res.json({
     msg: "get API - getUsers",
-    q,
-    api_key,
-    page,
-    limit,
+    users,
   });
 };
 
