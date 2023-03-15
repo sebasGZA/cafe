@@ -17,6 +17,7 @@ const {
   emailValidator,
   userValidatorById,
 } = require("../helpers/dbValidators");
+const { isAdminRole } = require("../middlewares/RolesValidator");
 
 const router = Router();
 
@@ -55,6 +56,7 @@ router.delete(
   "/:id",
   [
     JWTValidator,
+    isAdminRole,
     check("id", "id is not valid").isMongoId(),
     check("id").custom(userValidatorById),
     fieldsValidator,
