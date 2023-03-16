@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
+const { JWTValidator, fieldsValidator } = require("../middlewares");
 const {
   getCategories,
   postCategory,
@@ -14,7 +15,15 @@ router.get("/", getCategories);
 
 router.get("/:id", getCategoryById);
 
-router.post("/", postCategory);
+router.post(
+  "/",
+  [
+    JWTValidator,
+    check("name", "Name is required").not().isEmpty(),
+    fieldsValidator,
+  ],
+  postCategory
+);
 
 router.put("/:id", putCategory);
 

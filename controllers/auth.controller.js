@@ -33,7 +33,7 @@ const login = async (req = request, res = response) => {
     const token = await JWTGenerator(user.id);
 
     res.status(200).json({
-      msg: "post API - login",
+      msg: "login",
       user,
       token,
     });
@@ -75,7 +75,7 @@ const googleSignIn = async (req = request, res = response) => {
     const token = await JWTGenerator(user.uid);
 
     res.json({
-      msg: "Ok",
+      msg: "Google Sign-in",
       user,
       token,
     });

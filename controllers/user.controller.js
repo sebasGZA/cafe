@@ -12,7 +12,7 @@ const getUsers = async (req = request, res = response) => {
   ]);
 
   return res.status(200).json({
-    msg: "get API - getUsers",
+    msg: "getUsers",
     users,
     total,
   });
@@ -34,7 +34,7 @@ const postUser = async (req = request, res = response) => {
     await user.save();
 
     return res.status(201).json({
-      msg: "post API - postUser",
+      msg: "postUser",
       user,
     });
   } catch (e) {
@@ -55,7 +55,7 @@ const putUser = async (req = request, res = response) => {
     const userDb = await User.findOneAndUpdate(id, user);
 
     res.status(200).json({
-      msg: "put API - putUser",
+      msg: "putUser",
       userDb,
     });
   } catch (e) {
@@ -66,7 +66,7 @@ const putUser = async (req = request, res = response) => {
 
 const patchUser = (req, res = response) => {
   res.json({
-    msg: "patch API - patchUser",
+    msg: "patchUser",
   });
 };
 
@@ -76,7 +76,7 @@ const deleteUser = async (req = request, res = response) => {
   const userDeleted = await User.findByIdAndUpdate(id, { state: false });
 
   res.json({
-    msg: "delete API - deleteUser",
+    msg: "deleteUser",
     userDeleted,
   });
 };

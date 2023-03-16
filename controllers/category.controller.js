@@ -16,9 +16,34 @@ const getCategoryById = async (req = request, res = response) => {
 };
 
 const postCategory = async (req = request, res = response) => {
-  res.json({
-    msg: "postCategory",
-  });
+  try {
+    const name = req.body.name.toUpperCase();
+
+    const categoryDb = await Category.findOne({ name });
+    if (categoryDb) {
+      return res.status(400).json({
+        msg: `Category ${name} already exists`,
+      });
+    }
+
+    const data = {
+      name,
+      user: req.user._id,
+    };
+
+    const category = new Category(data);
+    await category.save();
+
+    res.status(201).json({
+      msg: "postCategory",
+      category,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      msg: "Error in postCategory form category.controller",
+    });
+  }
 };
 
 const putCategory = async (req = request, res = response) => {
