@@ -1,6 +1,10 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { JWTValidator, fieldsValidator } = require("../middlewares");
+const {
+  JWTValidator,
+  fieldsValidator,
+  isAdminRole,
+} = require("../middlewares");
 const {
   getCategories,
   postCategory,
@@ -8,12 +12,24 @@ const {
   putCategory,
   deleteCategory,
 } = require("../controllers/category.controller");
+const {
+  categoryByIdValidator,
+  categoryValidator,
+} = require("../helpers/dbValidators");
 
 const router = Router();
 
 router.get("/", getCategories);
 
-router.get("/:id", getCategoryById);
+router.get(
+  "/:id",
+  [
+    check("id", "id is not valid").isMongoId(),
+    check("id").custom(categoryByIdValidator),
+    fieldsValidator,
+  ],
+  getCategoryById
+);
 
 router.post(
   "/",
@@ -25,8 +41,29 @@ router.post(
   postCategory
 );
 
-router.put("/:id", putCategory);
+router.put(
+  "/:id",
+  [
+    JWTValidator,
+    check("id", "id is not valid").isMongoId(),
+    check("id").custom(categoryByIdValidator),
+    check("name", "Name is required").not().isEmpty(),
+    check("name").custom(categoryValidator),
+    fieldsValidator,
+  ],
+  putCategory
+);
 
-router.delete("/:id", deleteCategory);
+router.delete(
+  "/:id",
+  [
+    JWTValidator,
+    isAdminRole,
+    check("id", "id is not valid").isMongoId(),
+    check("id").custom(categoryByIdValidator),
+    fieldsValidator,
+  ],
+  deleteCategory
+);
 
 module.exports = router;

@@ -2,17 +2,36 @@ const { request, response } = require("express");
 const Category = require("../models/category.model");
 
 const getCategories = async (req = request, res = response) => {
-  const categories = await Category.find();
+  const { skip = 0, limit = 10 } = req.query;
+  const query = { state: true };
+
+  const [categories, total] = await Promise.all([
+    Category.find(query).skip(skip).limit(limit).populate("user", "name"),
+    Category.countDocuments(query),
+  ]);
+
   res.json({
     msg: "getCategories",
     categories,
+    total,
   });
 };
 
 const getCategoryById = async (req = request, res = response) => {
-  res.json({
-    msg: "getCategoryById",
-  });
+  try {
+    const { id } = req.params;
+
+    const category = await Category.findById(id).populate("user", "name");
+    res.json({
+      msg: "getCategoryById",
+      category,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      msg: "Error in getCategoryById from category.controller",
+    });
+  }
 };
 
 const postCategory = async (req = request, res = response) => {
@@ -47,14 +66,43 @@ const postCategory = async (req = request, res = response) => {
 };
 
 const putCategory = async (req = request, res = response) => {
-  res.json({
-    msg: "putCategory",
-  });
+  try {
+    const { id } = req.params;
+    const { state, user, ...data } = req.body;
+
+    data.user = req.user._id;
+    data.name = data.name.toUpperCase();
+
+    const categoryDb = await Category.findByIdAndUpdate(id, data, {
+      new: true,
+    }).populate("user", "name");
+
+    res.json({
+      msg: "putCategory",
+      categoryDb,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      msg: "Error in putCategory from category.controller",
+    });
+  }
 };
 
 const deleteCategory = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  const category = await Category.findByIdAndUpdate(
+    id,
+    {
+      state: false,
+    },
+    { new: true }
+  ).populate("user", "name");
+
   res.json({
     msg: "deleteCategory",
+    category,
   });
 };
 

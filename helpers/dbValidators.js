@@ -1,5 +1,4 @@
-const Role = require("../models/role.model");
-const User = require("../models/user.model");
+const { Role, User, Category } = require("../models");
 
 const roleValidator = async (role = "") => {
   const roleDb = await Role.findOne({ role });
@@ -22,8 +21,24 @@ const userValidatorById = async (id = "") => {
   }
 };
 
+const categoryByIdValidator = async (id = "") => {
+  const existCategory = await Category.findById(id);
+  if (!existCategory) {
+    throw new Error(`Category id ${id} is not valid`);
+  }
+};
+
+const categoryValidator = async (name = "") => {
+  const existCategory = await Category.findOne({ name });
+  if (existCategory) {
+    throw new Error(`Category ${name} already exists`);
+  }
+};
+
 module.exports = {
   roleValidator,
   emailValidator,
   userValidatorById,
+  categoryByIdValidator,
+  categoryValidator,
 };
