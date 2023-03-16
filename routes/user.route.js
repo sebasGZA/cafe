@@ -2,11 +2,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 
 //Middelwares
-const {
-  JWTValidator,
-  fieldsValidator,
-  hasRole,
-} = require("../middlewares");
+const { JWTValidator, fieldsValidator, hasRole } = require("../middlewares");
 
 //Controller
 const {
@@ -15,14 +11,14 @@ const {
   putUser,
   patchUser,
   deleteUser,
-} = require("../controllers/user.controller");
+} = require("../controllers");
 
 //Helpers
 const {
   roleValidator,
   emailValidator,
   userValidatorById,
-} = require("../helpers/dbValidators");
+} = require("../helpers");
 
 const router = Router();
 

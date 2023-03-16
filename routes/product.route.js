@@ -15,14 +15,14 @@ const {
   postProduct,
   putProduct,
   deleteProduct,
-} = require("../controllers/product.controller");
+} = require("../controllers");
 
 //Helpers
 const {
   productByIdValidator,
   productValidator,
   categoryByIdValidator,
-} = require("../helpers/dbValidators");
+} = require("../helpers");
 
 const router = Router();
 

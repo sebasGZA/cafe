@@ -15,13 +15,10 @@ const {
   getCategoryById,
   putCategory,
   deleteCategory,
-} = require("../controllers/category.controller");
+} = require("../controllers");
 
 //Helpers
-const {
-  categoryByIdValidator,
-  categoryValidator,
-} = require("../helpers/dbValidators");
+const { categoryByIdValidator, categoryValidator } = require("../helpers");
 
 const router = Router();
 

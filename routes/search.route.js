@@ -1,7 +1,7 @@
 const { Router } = require("express");
 
 //Controllers
-const { search } = require("../controllers/search.controller");
+const { search } = require("../controllers");
 
 const router = Router();
 

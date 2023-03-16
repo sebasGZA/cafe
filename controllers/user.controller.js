@@ -4,7 +4,7 @@ const { response, request } = require("express");
 const { User } = require("../models");
 
 //Helpers
-const { hashPassword } = require("../helpers/passwordGenerator");
+const { hashPassword } = require("../helpers");
 
 //Methods
 const getUsers = async (req = request, res = response) => {

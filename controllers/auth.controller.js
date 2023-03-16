@@ -5,8 +5,7 @@ const bcrypt = require("bcryptjs/dist/bcrypt");
 const { User } = require("../models");
 
 //Helpers
-const { JWTGenerator } = require("../helpers/JWT");
-const { googleVerify } = require("../helpers/GoogleValidator");
+const { googleVerify, JWTGenerator } = require("../helpers");
 
 //Methods
 const login = async (req = request, res = response) => {
