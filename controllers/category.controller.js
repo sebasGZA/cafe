@@ -91,11 +91,13 @@ const putCategory = async (req = request, res = response) => {
 
 const deleteCategory = async (req = request, res = response) => {
   const { id } = req.params;
+  const { uid } = req.user._id;
 
   const category = await Category.findByIdAndUpdate(
     id,
     {
       state: false,
+      user: uid,
     },
     { new: true }
   ).populate("user", "name");
