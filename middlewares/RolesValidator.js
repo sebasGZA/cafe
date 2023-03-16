@@ -17,6 +17,20 @@ const isAdminRole = (req = request, res = response, next) => {
   next();
 };
 
+const hasRole = (...roles) => {
+  return (req = request, res = response, next) => {
+    const { role } = req.user;
+    if (!roles.includes(role)) {
+      return res.status(401).json({
+        msg: `Server requires this roles: ${roles}`,
+      });
+    }
+
+    next();
+  };
+};
+
 module.exports = {
   isAdminRole,
+  hasRole,
 };
