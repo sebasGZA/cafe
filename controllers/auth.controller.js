@@ -50,10 +50,34 @@ const googleSignIn = async (req = request, res = response) => {
     const { id_token } = req.body;
 
     const { name, picture, email } = await googleVerify(id_token);
+    let user = await User.findOne({ email });
+    if (!user) {
+      //Create user
+      const data = {
+        name,
+        email,
+        password: ":p",
+        picture,
+        google: true,
+        role: "USER_ROLE",
+      };
+
+      user = new User(data);
+      await user.save();
+    }
+
+    if (!user.state) {
+      return res.status(401).json({
+        msg: "User unauthorized - report to admin",
+      });
+    }
+
+    const token = await JWTGenerator(user.uid);
 
     res.json({
       msg: "Ok",
-      id_token,
+      user,
+      token,
     });
   } catch (e) {
     console.log(e);
