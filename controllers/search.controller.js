@@ -1,7 +1,8 @@
 const { request, response } = require("express");
 const { Types } = require("mongoose");
 
-const { User } = require("../models");
+//Models
+const { User, Category, Product } = require("../models");
 const collections = ["roles", "users", "categories", "products"];
 
 const search = (req = request, res = response) => {
@@ -18,8 +19,10 @@ const search = (req = request, res = response) => {
       searchUsers(term, res);
       break;
     case "categories":
+      searchCategories(term, res);
       break;
     case "products":
+      searchProducts(term, res);
       break;
     default:
       res.status(500).json({
@@ -49,6 +52,47 @@ const searchUsers = async (term = "", res = response) => {
   return res.json({
     msg: "searchUsers",
     results: users,
+  });
+};
+
+const searchCategories = async (term = "", res = response) => {
+  const isMongoId = Types.ObjectId.isValid(term);
+
+  if (isMongoId) {
+    const category = await Category.findById(term);
+    return res.json({
+      msg: "searchCategories",
+      results: category ? [category] : [],
+    });
+  }
+
+  const regex = new RegExp(term, "i");
+
+  const categories = await Category.find({ state: true, name: regex });
+  return res.json({
+    msg: "searchCategories",
+    results: categories,
+  });
+};
+
+const searchProducts = async (term = "", res = response) => {
+  const isMongoId = Types.ObjectId.isValid(term);
+
+  if (isMongoId) {
+    const product = await Product.findById(term);
+    return res.json({
+      msg: "searchProducts",
+      results: product ? [product] : [],
+    });
+  }
+
+  const regex = new RegExp(term, "i");
+
+  const products = await Product.find({ state: true, name: regex });
+
+  return res.json({
+    msg: "searchProducts",
+    results: products,
   });
 };
 

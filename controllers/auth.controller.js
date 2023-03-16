@@ -1,9 +1,14 @@
 const { response, request } = require("express");
-const User = require("../models/user.model");
 const bcrypt = require("bcryptjs/dist/bcrypt");
+
+//Models
+const { User } = require("../models");
+
+//Helpers
 const { JWTGenerator } = require("../helpers/JWT");
 const { googleVerify } = require("../helpers/GoogleValidator");
 
+//Methods
 const login = async (req = request, res = response) => {
   try {
     const { email, password } = req.body;
