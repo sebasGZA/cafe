@@ -1,5 +1,7 @@
-const { Role, User, Category } = require("../models");
+//Models
+const { Role, User, Category, Product } = require("../models");
 
+//Methods
 const roleValidator = async (role = "") => {
   const roleDb = await Role.findOne({ role });
   if (!roleDb) {
@@ -29,9 +31,25 @@ const categoryByIdValidator = async (id = "") => {
 };
 
 const categoryValidator = async (name = "") => {
-  const existCategory = await Category.findOne({ name });
+  const existCategory = await Category.findOne({ name: name.toUpperCase() });
   if (existCategory) {
     throw new Error(`Category ${name} already exists`);
+  }
+};
+
+const productByIdValidator = async (id = "") => {
+  const existProduct = await Product.findById(id);
+  if (!existProduct) {
+    throw new Error(`Product id ${id} is not valid`);
+  }
+};
+
+const productValidator = async (name = undefined) => {
+  if (name) {
+    const existProduct = await Product.findOne({ name: name.toUpperCase() });
+    if (existProduct) {
+      throw new Error(`Product ${name} already exists`);
+    }
   }
 };
 
@@ -41,4 +59,6 @@ module.exports = {
   userValidatorById,
   categoryByIdValidator,
   categoryValidator,
+  productByIdValidator,
+  productValidator,
 };

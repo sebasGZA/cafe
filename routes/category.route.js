@@ -1,10 +1,14 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
+
+//Middlewares
 const {
   JWTValidator,
   fieldsValidator,
   isAdminRole,
 } = require("../middlewares");
+
+//Controller
 const {
   getCategories,
   postCategory,
@@ -12,6 +16,8 @@ const {
   putCategory,
   deleteCategory,
 } = require("../controllers/category.controller");
+
+//Helpers
 const {
   categoryByIdValidator,
   categoryValidator,
@@ -19,6 +25,7 @@ const {
 
 const router = Router();
 
+//Methods
 router.get("/", getCategories);
 
 router.get(
@@ -36,6 +43,7 @@ router.post(
   [
     JWTValidator,
     check("name", "Name is required").not().isEmpty(),
+    check("name").custom(categoryValidator),
     fieldsValidator,
   ],
   postCategory

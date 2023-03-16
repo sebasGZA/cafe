@@ -1,7 +1,12 @@
 const { response, request } = require("express");
-const User = require("../models/user.model");
+
+//Models
+const { User } = require("../models");
+
+//Helpers
 const { hashPassword } = require("../helpers/passwordGenerator");
 
+//Methods
 const getUsers = async (req = request, res = response) => {
   const { skip = 0, limit = 5 } = req.query;
   const query = { state: true };

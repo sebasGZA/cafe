@@ -1,6 +1,9 @@
 const { request, response } = require("express");
-const Category = require("../models/category.model");
 
+//Models
+const { Category } = require("../models");
+
+//Methds
 const getCategories = async (req = request, res = response) => {
   const { skip = 0, limit = 10 } = req.query;
   const query = { state: true };
@@ -37,14 +40,6 @@ const getCategoryById = async (req = request, res = response) => {
 const postCategory = async (req = request, res = response) => {
   try {
     const name = req.body.name.toUpperCase();
-
-    const categoryDb = await Category.findOne({ name });
-    if (categoryDb) {
-      return res.status(400).json({
-        msg: `Category ${name} already exists`,
-      });
-    }
-
     const data = {
       name,
       user: req.user._id,
