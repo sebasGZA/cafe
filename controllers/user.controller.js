@@ -1,7 +1,12 @@
 const { response, request } = require("express");
-const User = require("../models/user.model");
-const { hashPassword } = require("../helpers/passwordGenerator");
 
+//Models
+const { User } = require("../models");
+
+//Helpers
+const { hashPassword } = require("../helpers");
+
+//Methods
 const getUsers = async (req = request, res = response) => {
   const { skip = 0, limit = 5 } = req.query;
   const query = { state: true };
@@ -12,7 +17,7 @@ const getUsers = async (req = request, res = response) => {
   ]);
 
   return res.status(200).json({
-    msg: "get API - getUsers",
+    msg: "getUsers",
     users,
     total,
   });
@@ -34,7 +39,7 @@ const postUser = async (req = request, res = response) => {
     await user.save();
 
     return res.status(201).json({
-      msg: "post API - postUser",
+      msg: "postUser",
       user,
     });
   } catch (e) {
@@ -55,7 +60,7 @@ const putUser = async (req = request, res = response) => {
     const userDb = await User.findOneAndUpdate(id, user);
 
     res.status(200).json({
-      msg: "put API - putUser",
+      msg: "putUser",
       userDb,
     });
   } catch (e) {
@@ -66,19 +71,18 @@ const putUser = async (req = request, res = response) => {
 
 const patchUser = (req, res = response) => {
   res.json({
-    msg: "patch API - patchUser",
+    msg: "patchUser",
   });
 };
 
 const deleteUser = async (req = request, res = response) => {
   const { id } = req.params;
 
-  // const user = await User.findByIdAndDelete(id);
-  const user = await User.findByIdAndUpdate(id, { state: false });
+  const userDeleted = await User.findByIdAndUpdate(id, { state: false });
 
   res.json({
-    msg: "delete API - deleteUser",
-    user,
+    msg: "deleteUser",
+    userDeleted,
   });
 };
 
