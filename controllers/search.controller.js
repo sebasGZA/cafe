@@ -5,6 +5,7 @@ const { Types } = require("mongoose");
 const { User, Category, Product } = require("../models");
 const collections = ["roles", "users", "categories", "products"];
 
+//Methdos
 const search = (req = request, res = response) => {
   const { collection, term } = req.params;
 
@@ -59,7 +60,7 @@ const searchCategories = async (term = "", res = response) => {
   const isMongoId = Types.ObjectId.isValid(term);
 
   if (isMongoId) {
-    const category = await Category.findById(term);
+    const category = await Category.findById(term).populate("user", "name");
     return res.json({
       msg: "searchCategories",
       results: category ? [category] : [],
@@ -68,7 +69,10 @@ const searchCategories = async (term = "", res = response) => {
 
   const regex = new RegExp(term, "i");
 
-  const categories = await Category.find({ state: true, name: regex });
+  const categories = await Category.find({ state: true, name: regex }).populate(
+    "user",
+    "name"
+  );
   return res.json({
     msg: "searchCategories",
     results: categories,
@@ -79,7 +83,9 @@ const searchProducts = async (term = "", res = response) => {
   const isMongoId = Types.ObjectId.isValid(term);
 
   if (isMongoId) {
-    const product = await Product.findById(term);
+    const product = await Product.findById(term)
+      .populate("category", "name")
+      .populate("user", "name");
     return res.json({
       msg: "searchProducts",
       results: product ? [product] : [],
@@ -88,7 +94,9 @@ const searchProducts = async (term = "", res = response) => {
 
   const regex = new RegExp(term, "i");
 
-  const products = await Product.find({ state: true, name: regex });
+  const products = await Product.find({ state: true, name: regex })
+    .populate("category", "name")
+    .populate("user", "name");
 
   return res.json({
     msg: "searchProducts",

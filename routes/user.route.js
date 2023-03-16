@@ -26,6 +26,7 @@ const {
 
 const router = Router();
 
+//Methods
 router.get("/", getUsers);
 
 router.post(

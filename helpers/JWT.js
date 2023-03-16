@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+//Methods
 const JWTGenerator = (uid = "") => {
   return new Promise((resolve, reject) => {
     const payload = { uid };

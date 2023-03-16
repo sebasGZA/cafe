@@ -1,6 +1,13 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 
+//Middlewares
+const {
+  fieldsValidator,
+  JWTValidator,
+  isAdminRole,
+} = require("../middlewares");
+
 //Controller
 const {
   getProducts,
@@ -9,16 +16,13 @@ const {
   putProduct,
   deleteProduct,
 } = require("../controllers/product.controller");
+
+//Helpers
 const {
   productByIdValidator,
   productValidator,
   categoryByIdValidator,
 } = require("../helpers/dbValidators");
-const {
-  fieldsValidator,
-  JWTValidator,
-  isAdminRole,
-} = require("../middlewares");
 
 const router = Router();
 
