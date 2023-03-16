@@ -10,6 +10,7 @@ class Server {
       auth: "/api/auth",
       category: "/api/category",
       product: "/api/product",
+      searh: "/api/search",
       user: "/api/user",
     };
 
@@ -39,6 +40,7 @@ class Server {
     this.app.use(this.paths.auth, require("../routes/auth.route"));
     this.app.use(this.paths.category, require("../routes/category.route"));
     this.app.use(this.paths.product, require("../routes/product.route"));
+    this.app.use(this.paths.searh, require("../routes/search.route"));
     this.app.use(this.paths.user, require("../routes/user.route"));
   }
 
