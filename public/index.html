@@ -29,7 +29,20 @@
 
     <script>
       function handleCredentialResponse(response) {
-        console.log('id_token', response.credential);
+        const body = {
+          id_token: response.credential,
+        };
+
+        fetch("http://localhost:3000/api/auth/google", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(body),
+        })
+          .then((resp) => resp.json())
+          .then((resp) => console.log(resp))
+          .catch((e) => console.warn(e));
       }
     </script>
   </body>
